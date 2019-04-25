@@ -1,0 +1,94 @@
+[[working-with-asciidoctor]]
+== Working with Asciidoctor
+
+This section describes any aspects of working with Asciidoctor that are particularly
+relevant to Spring REST Docs.
+
+
+
+[[working-with-asciidoctor-resources]]
+=== Resources
+
+ * http://asciidoctor.org/docs/asciidoc-syntax-quick-reference[Syntax quick reference]
+ * http://asciidoctor.org/docs/user-manual[User manual]
+
+
+
+[[working-with-asciidoctor-including-snippets]]
+=== Including snippets
+
+The http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#include-files[include
+macro] is used to include generated snippets in your documentation. The `snippets`
+attribute that is automatically set by `spring-restdocs-asciidoctor` configured in the
+<<getting-started-build-configuration, build configuration>> can be used to reference the
+snippets output directory. For example:
+
+[source,indent=0]
+----
+\include::{snippets}/index/curl-request.adoc[]
+----
+
+
+
+[[working-with-asciidoctor-customizing-tables]]
+=== Customizing tables
+
+Many of the snippets contain a table in its default configuration. The appearance of the
+table can be customized, either by providing some additional configuration when the
+snippet is included or by using a custom snippet template.
+
+
+
+[[working-with-asciidoctor-customizing-tables-formatting-columns]]
+==== Formatting columns
+
+Asciidoctor has rich support for
+http://asciidoctor.org/docs/user-manual/#cols-format[formatting a table's columns]. For
+example, the widths of a table's columns can be specified using the `cols` attribute:
+
+[source,indent=0]
+----
+[cols=1,3] <1>
+\include::{snippets}/index/links.adoc[]
+----
+<1> The table's width will be split across its two columns with the second column being
+three times as wide as the first.
+
+
+
+[[working-with-asciidoctor-customizing-tables-title]]
+==== Configuring the title
+
+The title of a table can be specified using a line prefixed by a `.`:
+
+[source,indent=0]
+----
+.Links <1>
+\include::{snippets}/index/links.adoc[]
+----
+<1> The table's title will be `Links`.
+
+
+
+[[working-with-asciidoctor-customizing-tables-title]]
+==== Avoiding table formatting problems
+
+Asciidoctor uses the `|` character to delimit cells in a table. This can cause problems
+if you want a `|` to appear in a cell's contents. The problem can be avoided by
+escaping the `|` with a backslash, i.e. by using `\|` rather than `|`.
+
+All of the default Asciidoctor snippet templates perform this escaping automatically
+use a Mustache lamba named `tableCellContent`. If you write your own custom templates
+you may want to use this lamba. For example, to escape `|` characters
+in a cell that contains the value of a `description` attribute:
+
+----
+| {{#tableCellContent}}{{description}}{{/tableCellContent}}
+----
+
+
+
+==== Further reading
+
+Refer to the http://asciidoctor.org/docs/user-manual/#tables[Tables section of
+the Asciidoctor user manual] for more information about customizing tables.
